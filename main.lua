@@ -130,7 +130,7 @@ local function createModMenu()
 
             for _, enemy in pairs(plrs:GetPlayers()) do
                 if enemy ~= player and enemy.Character and enemy.Character:FindFirstChild("HumanoidRootPart") then
-                    local distance = (enemy.Character.HumanoidRootPart.Position - camera.CFrame.p).Magnitude
+                    local distance = (enemy.Character.HumanoidRootPart.Position - game.Workspace.CurrentCamera.CFrame.p).Magnitude
                     if distance < closestDistance then
                         closestDistance = distance
                         closestPlayer = enemy
@@ -140,7 +140,7 @@ local function createModMenu()
 
             if closestPlayer then
                 local headPosition = closestPlayer.Character:FindFirstChild("Head").Position
-                camera.CFrame = CFrame.new(camera.CFrame.p, headPosition)
+                game.Workspace.CurrentCamera.CFrame = CFrame.new(game.Workspace.CurrentCamera.CFrame.p, headPosition)
             end
         end
     end)
