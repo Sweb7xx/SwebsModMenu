@@ -120,7 +120,7 @@ local function createModMenu()
 
     local aimbotting = false
     aimbot.MouseButton1Click:Connect(function()
-aimbotting = not aimbotting
+        aimbotting = not aimbotting
         aimbot.Text = aimbotting and "Aimbot: ON" or "Aimbot: OFF"
     end)
 
