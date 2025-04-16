@@ -1,78 +1,54 @@
--- Swebs Mod Menu Script
-local player = game.Players.LocalPlayer
+loadstring([[
+--[[ 
+  ________  ___      ___       ________    ___   ___  _______   
+ |  ____/ |  |     /   |     |  ____/   /  |  |  | |  ___  |  
+ | |__    |  |    /    |     | |__     /   |  |  | | |   |  |  
+ |  __|   |  |   /     |     |  __|    /    |  |  | | |   |  |  
+ | |____  |  |  /      |____ | |____   /     |  |  | | |___|  |  
+ |______| |__| /_______|_____|______| /      |__|  | |_______|  
+                                                              
+         vinny#0123                                            
+]]--
+
+local uis = game:GetService("UserInputService")
+local plrs = game:GetService("Players")
+local gui = game:GetService("StarterGui")
+
+local plr = plrs.LocalPlayer
+local char = plr.Character
+local hum = char:FindFirstChild("Humanoid")
+
 local screenGui = Instance.new("ScreenGui")
-local frame = Instance.new("Frame")
-local aimbotButton = Instance.new("TextButton")
-local speedButton = Instance.new("TextButton")
+screenGui.Parent = gui
 
--- Create the GUI elements
-screenGui.Parent = player:WaitForChild("PlayerGui")
-screenGui.Name = "SwebsModMenu"
+local textLabel = Instance.new("TextLabel")
+textLabel.Parent = screenGui
+textLabel.Size = UDim2.new(0, 400, 0, 100)
+textLabel.Position = UDim2.new(0, 50, 0, 50)
+textLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextScaled = true
+textLabel.Text = "Loading Player Info..."
 
-frame.Parent = screenGui
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.Position = UDim2.new(0.5, -150, 0.5, -100)
-frame.Size = UDim2.new(0, 300, 0, 200)
+local function updatePlayerInfo()
+    local playerInfo = "Player: " .. plr.Name .. "\n"
+    playerInfo = playerInfo .. "Account Created: " .. plr.AccountAge .. " days ago\n"
+    playerInfo = playerInfo .. "User ID: " .. plr.UserId .. "\n"
+    playerInfo = playerInfo .. "Character: " .. (char and char.Name or "N/A") .. "\n"
+    
+    textLabel.Text = playerInfo
+end
 
--- Aimbot button
-aimbotButton.Parent = frame
-aimbotButton.Size = UDim2.new(0, 280, 0, 50)
-aimbotButton.Position = UDim2.new(0, 10, 0, 10)
-aimbotButton.Text = "Toggle Aimbot"
-aimbotButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+-- Run the info update when the game starts
+updatePlayerInfo()
 
--- Speed button
-speedButton.Parent = frame
-speedButton.Size = UDim2.new(0, 280, 0, 50)
-speedButton.Position = UDim2.new(0, 10, 0, 70)
-speedButton.Text = "Toggle Speed Boost"
-speedButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255)
-
--- Aimbot feature (simplified)
-local aimbotEnabled = false
-aimbotButton.MouseButton1Click:Connect(function()
-    aimbotEnabled = not aimbotEnabled
-    if aimbotEnabled then
-        aimbotButton.Text = "Aimbot: ON"
-    else
-        aimbotButton.Text = "Aimbot: OFF"
+-- Update info when the player respawns or character changes
+plrs.PlayerAdded:Connect(function(player)
+    if player == plr then
+        player.CharacterAdded:Connect(function()
+            char = player.Character
+            updatePlayerInfo()
+        end)
     end
 end)
-
--- Speed Boost feature
-local speedBoostEnabled = false
-speedButton.MouseButton1Click:Connect(function()
-    speedBoostEnabled = not speedBoostEnabled
-    if speedBoostEnabled then
-        player.Character.Humanoid.WalkSpeed = 100
-        speedButton.Text = "Speed Boost: ON"
-    else
-        player.Character.Humanoid.WalkSpeed = 16
-        speedButton.Text = "Speed Boost: OFF"
-    end
-end)
-
--- Function to handle aimbot logic (simplified)
-game:GetService("RunService").Heartbeat:Connect(function()
-    if aimbotEnabled then
-        local closestTarget = nil
-        local shortestDistance = math.huge
-        
-        -- Find the closest player
-        for _, target in pairs(game.Players:GetPlayers()) do
-            if target ~= player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local distance = (target.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude
-                if distance < shortestDistance then
-                    closestTarget = target
-                    shortestDistance = distance
-                end
-            end
-        end
-        
-        -- Aim at the closest player (simplified)
-        if closestTarget then
-            local targetPosition = closestTarget.Character.HumanoidRootPart.Position
-            player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
-        end
-    end
-end)
+]]):Run()
