@@ -119,7 +119,8 @@ local function createModMenu()
     aimbot.TextColor3 = Color3.fromRGB(255, 255, 255)
 
     local aimbotting = false
-    aimbot.MouseButton1Click:Connect(function()aimbotting = not aimbotting
+    aimbot.MouseButton1Click:Connect(function()
+aimbotting = not aimbotting
         aimbot.Text = aimbotting and "Aimbot: ON" or "Aimbot: OFF"
     end)
 
